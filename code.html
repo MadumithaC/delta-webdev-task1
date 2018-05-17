@@ -1,0 +1,47 @@
+<html>
+<head>
+	
+	</head>
+<body>
+<p id="p1" style="border:2px solid red">
+</p>
+<form id="form" style="display:none" action="" onsubmit="update()">
+Name:<input type= "text" id="name" name="name" placeholder="Enter Name"><br>
+Rating:<input type="number" id="rating" name="rating"  placeholder="On a scale of 10"><br>
+Comments:<textarea rows="20" id="comments" cols="20"></textarea>
+<input type="button" value="Save" onclick="update();">
+<input type="button" value="submit" onclick="myfun2();">
+<input type="reset" value="reset" >
+</form>
+
+<button type="button" id="add" onclick="myfun()">Add</button>
+
+
+<script>
+	function myfun() {
+document.getElementById("form").style.display="block";
+}
+function update()
+{
+   var name= document.getElementById("name").value;
+   var rating= document.getElementById("rating").value;
+   var comments= document.getElementById("comments").value;
+ localStorage.setItem("mentee1",[name, rating , comments]);
+
+ var newp = document.createElement("p");
+var newcontent = document.createTextNode(localStorage.getItem( mentee1 ));
+newp.appendChild(newcontent);
+var currentp = document.getElementById("p1");
+document.body.insertBefore(newp,currentp);
+   
+   
+}
+  function myfun2()
+{
+  	alert("func2");
+   document.getElementById("form").style.display="none";
+}
+</script>
+</body>
+
+</html>
