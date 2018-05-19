@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <style>
@@ -70,11 +71,11 @@ button:hover {
 
 .modal {
     display: none; 
-    position: fixed;
+    position: fixed; 
     z-index: 1; 
     left: 0;
     top: 0;
-    width: 100%;
+    width: 100%; 
     height: 100%;
     overflow: auto;
     background-color: #474e5d;
@@ -84,11 +85,10 @@ button:hover {
 
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto 15% auto;
-    border: 1px solid #888;
+    margin: 5% auto 15% auto; 
+        border: 1px solid #888;
     width: 80%; 
 }
-
 
 hr {
     border: 1px solid #f1f1f1;
@@ -129,7 +129,7 @@ hr {
     }
 }
 </style>
-<body>
+<body id="b">
 
 <h2>My Mentees</h2>
 
@@ -137,6 +137,7 @@ hr {
 <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Add</button>
 <button onclick="sort()" style="width:auto;">Sort</button>
 <p id="p1"></p>
+<h3 style= "display:none; color:darkblue " id="head1"> Sorted List</h3><br>
 <p id="p2"></p>
 
 
@@ -149,6 +150,7 @@ hr {
       <hr>
       <label for="name"><b>Name</b></label>
       <input type="text" placeholder="Enter Name" id="name" name="name" required>
+
       <label for="rating"><b>Rating</b></label>
       <input type="number" placeholder="Enter Rating " id="rating" name="rating" required>
       <label for="comments"><b>Comments</b></label>
@@ -166,9 +168,15 @@ hr {
 
 <script>
 var i = 0;  
-var newp, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[]; 
-var modal = document.getElementById('id01');
-
+var newp, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; 
+function deletetable() {
+//var f= deletetable.getElementById("d"+i);
+//f.addEventListener("click",deletetable);
+parent = document.getElementById("b");
+child = document.getElementById("t"+i);
+parent.removeChild(child); 
+return;
+}
 function update() {  
   for(;i>=0;) {
 
@@ -176,11 +184,12 @@ function update() {
     mname[i]= document.getElementById("name").value;
     rating[i]= document.getElementById("rating").value; 
     comments[i]= document.getElementById("comments").value;
-    localStorage.setItem("mentee", "Name: " + mname[i]+ "   Rating: "+ rating[i]+" Comments: "+comments[i]);
+    menteelist[i]=[mname[i],rating[i], comments[i]];
     
+    localStorage.setItem("mentee"+i, "Name: " + menteelist[i][0]+ " Rating:"+ menteelist[i][1]+" Comments: "+ menteelist[i][2]);
   
     newp = document.createElement("table");
-    newcontent = document.createTextNode(localStorage.getItem( "mentee"));
+    newcontent = document.createTextNode(localStorage.getItem( "mentee"+i));
     newp.appendChild(newcontent);
     currentp = document.getElementById("p1");
     document.body.insertBefore(newp,currentp);
@@ -195,6 +204,7 @@ function update() {
     var newb2 = document.createElement("button");
     newb2.style.width="auto";
     newb2.style.backgroundColor="red";
+    newb2.onclick= deletetable();
     var newbtn2 = document.createTextNode("delete");
 
     newb2.appendChild(newbtn2);
@@ -210,11 +220,18 @@ function update() {
 }
 
 function sort() {
-    rating.sort(function(a, b){return a - b});
+    document.getElementById("p2").innerHTML="";
+    document.getElementById("head1").style.display="block";
+    
+    menteelist.sort(function(a, b){return a[1] - b[1]});
     var n;
-    for(n=1;n<i;n++) {alert(rating[0]);
-             document.getElementById("p2").innerHTML =/* "<h4>Sorted List</h4><br>Name:" + mname[n] + "<br>Rating:" + */rating[n] /*+ "<br>Comments:" + comments[n]*/;
-           }
+    for(n=0;n<i;n++) {
+
+      
+      document.getElementById("p2").innerHTML += "<br><b>Name:</b>" + menteelist[n][0] + "<br><b>Rating:</b>" + menteelist[n][1]+ "<br><b>Comments:</b>" + menteelist[n][2]+ "<br>";
+       
+      }
+
 }
 
 
