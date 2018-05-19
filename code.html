@@ -168,7 +168,7 @@ hr {
 
 <script>
 var i = 0;  
-var newp, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; 
+var newp, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; /*
 function deletetable() {
 //var f= deletetable.getElementById("d"+i);
 //f.addEventListener("click",deletetable);
@@ -176,7 +176,7 @@ parent = document.getElementById("b");
 child = document.getElementById("t"+i);
 parent.removeChild(child); 
 return;
-}
+} */
 function update() {  
   for(;i>=0;) {
 
@@ -189,7 +189,7 @@ function update() {
     localStorage.setItem("mentee"+i, "Name: " + menteelist[i][0]+ " Rating:"+ menteelist[i][1]+" Comments: "+ menteelist[i][2]);
   
     newp = document.createElement("table");
-    newp.id="t"+i;
+   // newp.id="t"+i;
     newcontent = document.createTextNode(localStorage.getItem( "mentee"+i));
     newp.appendChild(newcontent);
     currentp = document.getElementById("p1");
@@ -205,8 +205,8 @@ function update() {
     var newb2 = document.createElement("button");
     newb2.style.width="auto";
     newb2.style.backgroundColor="red";
-    
-    newb2.onclick= deletetable();
+
+   // newb2.onclick= deletetable();
     var newbtn2 = document.createTextNode("delete");
 
     newb2.appendChild(newbtn2);
