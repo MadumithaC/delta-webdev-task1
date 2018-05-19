@@ -189,6 +189,7 @@ function update() {
     localStorage.setItem("mentee"+i, "Name: " + menteelist[i][0]+ " Rating:"+ menteelist[i][1]+" Comments: "+ menteelist[i][2]);
   
     newp = document.createElement("table");
+    newp.id="t"+i;
     newcontent = document.createTextNode(localStorage.getItem( "mentee"+i));
     newp.appendChild(newcontent);
     currentp = document.getElementById("p1");
@@ -204,6 +205,7 @@ function update() {
     var newb2 = document.createElement("button");
     newb2.style.width="auto";
     newb2.style.backgroundColor="red";
+    
     newb2.onclick= deletetable();
     var newbtn2 = document.createTextNode("delete");
 
