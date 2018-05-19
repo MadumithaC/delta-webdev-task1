@@ -174,6 +174,17 @@ hr {
 <script>
 var i = 0;  
 var newp, newb1, newb2,newbtn1, newbtn2, currentbtn1, currentp, parent, child1, child2, child3, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; 
+window.onload = function() { 
+   localStorage.getItem("count");
+   for(var b=0;b<count; b++) {
+   var t1 = document.createElement("table"); 
+   var t2 = document.createTextNode(localStorage.getItem("mentee"+b));
+   t1.appendChild(t2);
+   var t3 = document.getElementById("p1");
+   document.body.insertBefore(t1, t3); 
+  
+}
+}
 
 var modal = document.getElementById('id01');
 
