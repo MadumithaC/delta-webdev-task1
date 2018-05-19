@@ -227,10 +227,10 @@ parent.removeChild(child1);
 parent.removeChild(child2); 
 parent.removeChild(child3); 
 delete menteelist[y];
-localStorage.removeItem("mentee"+i);
+localStorage.removeItem("mentee"+y);
 for(  ; y<(menteelist.length); y++) {
- menteelist[y] = menteelist[y+1];
- localStorage.setItem("mentee"+y, "Name: "+ menteelist[y][0]+ " Rating:" + menteelist[y][1] + "Comments: " + menteelist[y][2]);
+ var newarray2 = menteelist[y+1].slice();
+ localStorage.setItem("mentee"+y, "Name: "+ newarray2[0]+ " Rating:" + newarray2[1] + "Comments: " + newarray2[2]);
 }
 localStorage.setItem("count", i+1);
 
@@ -254,8 +254,8 @@ parent.removeChild(child3);
 delete menteelist[x];
 localStorage.removeItem("mentee"+x);
 for(  ; x<(menteelist.length-1); x++) {
- menteelist[x] = menteelist[x+1];
- localStorage.setItem("mentee"+x, "Name: "+ menteelist[x][0]+ " Rating:" + menteelist[x][1] + "Comments: " + menteelist[x][2]);
+ var newarray = menteelist[x+1].slice();
+ localStorage.setItem("mentee"+x, "Name: "+ newarray[0]+ " Rating:" + newarray[1] + "Comments: " + newarray[2]);
 }
 i--;
 localStorage.setItem("count", i+1);
