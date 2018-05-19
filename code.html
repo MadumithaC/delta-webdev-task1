@@ -175,13 +175,33 @@ hr {
 var i = 0;  
 var newp, newb1, newb2,newbtn1, newbtn2, currentbtn1, currentp, parent, child1, child2, child3, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; 
 window.onload = function() { 
-   localStorage.getItem("count");
-   for(var b=0;b<count; b++) {
+   var i = localStorage.getItem("count");
+   for(var b=0;b<i; b++) {
    var t1 = document.createElement("table"); 
    var t2 = document.createTextNode(localStorage.getItem("mentee"+b));
    t1.appendChild(t2);
    var t3 = document.getElementById("p1");
    document.body.insertBefore(t1, t3); 
+
+   newb1 = document.createElement("button");
+    newb1.style.width="auto";
+    newb1.setAttribute("id","e"+i);
+    newbtn1= document.createTextNode("edit");
+    newb1.appendChild(newbtn1);
+    currentbtn1 = document.getElementById("p1");
+    document.body.insertBefore(newb1, currentbtn1);
+    newb1.addEventListener("click", edittable.bind(this,i)); 
+
+    newb2 = document.createElement("button");
+    newb2.style.width="auto";
+    newb2.style.backgroundColor="red";
+    newb2.setAttribute("id","d"+i);
+    newbtn2 = document.createTextNode("delete");
+    newb2.appendChild(newbtn2);
+    currentbtn2 = document.getElementById("p1");
+    document.body.insertBefore(newb2, currentbtn2);
+    newb2.addEventListener("click", deletetable.bind(this,i)); 
+    
   
 }
 }
@@ -212,7 +232,7 @@ for(  ; y<(menteelist.length); y++) {
  menteelist[y] = menteelist[y+1];
  localStorage.setItem("mentee"+y, "Name: "+ menteelist[y][0]+ " Rating:" + menteelist[y][1] + "Comments: " + menteelist[y][2]);
 }
-
+localStorage.setItem("count", i+1);
 
 
 return;
@@ -232,13 +252,13 @@ parent.removeChild(child1);
 parent.removeChild(child2); 
 parent.removeChild(child3); 
 delete menteelist[x];
-localStorage.removeItem("mentee"+i);
+localStorage.removeItem("mentee"+x);
 for(  ; x<(menteelist.length-1); x++) {
  menteelist[x] = menteelist[x+1];
  localStorage.setItem("mentee"+x, "Name: "+ menteelist[x][0]+ " Rating:" + menteelist[x][1] + "Comments: " + menteelist[x][2]);
 }
 i--;
-
+localStorage.setItem("count", i+1);
 
 return;
 }
