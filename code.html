@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html>
 <style>
 body {
     font-family: Arial, Helvetica, sans-serif;
+    background-color: #11415a;
       
 }
 * {box-sizing: border-box}
@@ -76,8 +76,8 @@ button:hover {
     left: 0;
     top: 0;
     width: 100%; 
-    height: 100%;
-    overflow: auto;
+    height: 100%; 
+    overflow: auto; 
     background-color: #474e5d;
     padding-top: 50px;
 }
@@ -86,9 +86,10 @@ button:hover {
 .modal-content {
     background-color: #fefefe;
     margin: 5% auto 15% auto; 
-        border: 1px solid #888;
+    border: 1px solid #888;
     width: 80%; 
 }
+
 
 hr {
     border: 1px solid #f1f1f1;
@@ -131,7 +132,8 @@ hr {
 </style>
 <body id="b">
 
-<h2>My Mentees</h2>
+<h1 style="text-align: center;border: 10px solid #474e5d; background-color: lightblue; padding: 14px; margin:15px">My Mentees</h1>
+
 
 
 <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Add</button>
@@ -168,15 +170,66 @@ hr {
 
 <script>
 var i = 0;  
-var newp, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; /*
-function deletetable() {
-//var f= deletetable.getElementById("d"+i);
-//f.addEventListener("click",deletetable);
+var newp, newb1, newb2,newbtn1, newbtn2, currentbtn1, currentp, parent, child1, child2, child3, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; 
+
+var modal = document.getElementById('id01');
+
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+function edittable(y) {
+document.getElementById('id01').style.display='block';
+  
 parent = document.getElementById("b");
-child = document.getElementById("t"+i);
-parent.removeChild(child); 
+child1 = document.getElementById("t"+y);
+child2 = document.getElementById("d"+y);
+child3 = document.getElementById("e"+y);
+
+parent.removeChild(child1); 
+parent.removeChild(child2); 
+parent.removeChild(child3); 
+delete menteelist[y];
+localStorage.removeItem("mentee"+i);
+for(  ; y<(menteelist.length); y++) {
+ menteelist[y] = menteelist[y+1];
+ localStorage.setItem("mentee"+y, "Name: "+ menteelist[y][0]+ " Rating:" + menteelist[y][1] + "Comments: " + menteelist[y][2]);
+}
+
+
+
 return;
-} */
+}
+
+
+
+
+ function deletetable(x) {
+
+parent = document.getElementById("b");
+child1 = document.getElementById("t"+x);
+child2 = document.getElementById("d"+x);
+child3 = document.getElementById("e"+x);
+
+parent.removeChild(child1); 
+parent.removeChild(child2); 
+parent.removeChild(child3); 
+delete menteelist[x];
+localStorage.removeItem("mentee"+i);
+for(  ; x<(menteelist.length-1); x++) {
+ menteelist[x] = menteelist[x+1];
+ localStorage.setItem("mentee"+x, "Name: "+ menteelist[x][0]+ " Rating:" + menteelist[x][1] + "Comments: " + menteelist[x][2]);
+}
+i--;
+
+
+return;
+}
+
+
 function update() {  
   for(;i>=0;) {
 
@@ -185,59 +238,61 @@ function update() {
     rating[i]= document.getElementById("rating").value; 
     comments[i]= document.getElementById("comments").value;
     menteelist[i]=[mname[i],rating[i], comments[i]];
-    
+    localStorage.setItem("count", i+1);
     localStorage.setItem("mentee"+i, "Name: " + menteelist[i][0]+ " Rating:"+ menteelist[i][1]+" Comments: "+ menteelist[i][2]);
   
     newp = document.createElement("table");
-   // newp.id="t"+i;
+    newp.setAttribute("id","t"+i);
     newcontent = document.createTextNode(localStorage.getItem( "mentee"+i));
     newp.appendChild(newcontent);
     currentp = document.getElementById("p1");
     document.body.insertBefore(newp,currentp);
 
-    var newb1 = document.createElement("button");
+    newb1 = document.createElement("button");
     newb1.style.width="auto";
-    var newbtn1= document.createTextNode("edit");
+    newb1.setAttribute("id","e"+i);
+    newbtn1= document.createTextNode("edit");
     newb1.appendChild(newbtn1);
-    var currentbtn1 = document.getElementById("p1");
+    currentbtn1 = document.getElementById("p1");
     document.body.insertBefore(newb1, currentbtn1);
+    newb1.addEventListener("click", edittable.bind(this,i)); 
 
-    var newb2 = document.createElement("button");
+    newb2 = document.createElement("button");
     newb2.style.width="auto";
     newb2.style.backgroundColor="red";
-
-   // newb2.onclick= deletetable();
-    var newbtn2 = document.createTextNode("delete");
-
+    newb2.setAttribute("id","d"+i);
+    newbtn2 = document.createTextNode("delete");
     newb2.appendChild(newbtn2);
-    var currentbtn2 = document.getElementById("p1");
+    currentbtn2 = document.getElementById("p1");
     document.body.insertBefore(newb2, currentbtn2);
-     
-
+    newb2.addEventListener("click", deletetable.bind(this,i)); 
+    
     colorvariant();
-
+    
     i++;
     break;
+    
   }
+ 
 }
 
 function sort() {
     document.getElementById("p2").innerHTML="";
     document.getElementById("head1").style.display="block";
-    
-    menteelist.sort(function(a, b){return a[1] - b[1]});
+    var duplicate = menteelist.slice();
+    duplicate.sort(function(a, b){return a[1] - b[1]});
     var n;
     for(n=0;n<i;n++) {
 
       
-      document.getElementById("p2").innerHTML += "<br><b>Name:</b>" + menteelist[n][0] + "<br><b>Rating:</b>" + menteelist[n][1]+ "<br><b>Comments:</b>" + menteelist[n][2]+ "<br>";
+      document.getElementById("p2").innerHTML += "<br><b>Name:</b>" + duplicate[n][0] + "<br><b>Rating:</b>" + duplicate[n][1]+ "<br><b>Comments:</b>" + duplicate [n][2]+ "<br>";
        
       }
 
 }
 
 
-function colorvariant() {
+function colorvariant() { 
 
   switch(rating[i]) {
     
@@ -257,6 +312,8 @@ function colorvariant() {
 
   return;  
 }
+
+
 </script>
 
 </body>
