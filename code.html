@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,9 +6,9 @@
 <style>
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #11415a;
-      
+    background-color: lightblue;
 }
+
 * {box-sizing: border-box}
 
 table {
@@ -27,12 +28,10 @@ input[type=text], input[type=number], textarea {
     background: #f1f1f1;
 }
 
-
 input[type=text]:focus, input[type=number]:focus, textarea:focus {
     background-color: #ddd;
     outline: none;
 }
-
 
 button {
     background-color: #4CAF50;
@@ -49,27 +48,24 @@ button:hover {
     opacity:1;
 }
 
-
 .cancelbtn {
     padding: 14px 20px;
     background-color: #f44336;
 }
+
 .resetbtn {
     padding: 14px 20px;
     background-color: #000044;
 }
-
 
 .cancelbtn,.savebtn, .resetbtn {
   float: left;
   width: 33.33%;
 }
 
-
 .container {
     padding: 16px;
 }
-
 
 .modal {
     display: none; 
@@ -84,7 +80,6 @@ button:hover {
     padding-top: 50px;
 }
 
-
 .modal-content {
     background-color: #fefefe;
     margin: 5% auto 15% auto; 
@@ -92,12 +87,10 @@ button:hover {
     width: 80%; 
 }
 
-
 hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
 }
- 
 
 .close {
     position: absolute;
@@ -114,7 +107,6 @@ hr {
     cursor: pointer;
 }
 
-
 .clearfix::after {
     content: "";
     clear: both;
@@ -125,26 +117,23 @@ hr {
     border: 2px dashed red;
 }
 
-
 @media screen and (max-width: 300px) {
     .cancelbtn, .savebtn , .resetbtn {
        width: 100%;
     }
 }
+
 </style>
 </head>
 <body id="b">
 
-<h1 style="text-align: center;border: 10px solid #474e5d; background-color: lightblue; padding: 14px; margin:15px">My Mentees</h1>
-
-
+<h1 style="text-align: center;border: 10px solid #11415a; background-color: #39b7cd; padding: 14px; margin:15px">My Mentees</h1>
 
 <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Add</button>
 <button onclick="sort()" style="width:auto;">Sort</button>
 <p id="p1"></p>
 <h3 style= "display:none; color:darkblue " id="head1"> Sorted List</h3><br>
 <p id="p2"></p>
-
 
 <div id="id01" class="modal">
   <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
@@ -155,17 +144,14 @@ hr {
       <hr>
       <label for="name"><b>Name</b></label>
       <input type="text" placeholder="Enter Name" id="name" name="name" required>
-
       <label for="rating"><b>Rating</b></label>
       <input type="number" placeholder="Enter Rating " id="rating" name="rating" required>
       <label for="comments"><b>Comments</b></label>
       <textarea type="text" placeholder="Enter Comments" id= "comments" name="comments"></textarea>
-    
       <div class="clearfix">
-        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-        <button type="button" class="savebtn" onclick="document.getElementById('id01').style.display= 'none'; update();">Save</button>
-        <button type="reset" class="resetbtn">Reset</button>
-        
+          <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+          <button type="button"  class="savebtn" onclick=";document.getElementById('id01').style.display= 'none'; update()">Save</button>
+          <button type="button" id="editnsave" class="resetbtn">Edit and Save</button>   
       </div>
     </div>
   </form>
@@ -173,51 +159,51 @@ hr {
 
 <script>
 var i = 0;  
-var newp, newb1, newb2,newbtn1, newbtn2, currentbtn1, currentp, parent, child1, child2, child3, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; 
+var newp = [], newb1=[], newb2=[], newbtn1, newbtn2, currentbtn1, currentp, parent, child1, child2, child3, newcontent,editbtn, deletebtn, currentp, mname =[], rating =[], comments =[], menteelist=[]; 
+
 window.onload = function() { 
-   var i = localStorage.getItem("count");
-   for(var b=0;b<i; b++) {
+  var t = localStorage.getItem("count");    
+   for(var b=0;b<t; b++) {
    var t1 = document.createElement("table"); 
    var t2 = document.createTextNode(localStorage.getItem("mentee"+b));
    t1.appendChild(t2);
    var t3 = document.getElementById("p1");
    document.body.insertBefore(t1, t3); 
-
+   
    newb1 = document.createElement("button");
-    newb1.style.width="auto";
-    newb1.setAttribute("id","e"+i);
-    newbtn1= document.createTextNode("edit");
-    newb1.appendChild(newbtn1);
-    currentbtn1 = document.getElementById("p1");
-    document.body.insertBefore(newb1, currentbtn1);
-    newb1.addEventListener("click", edittable.bind(this,i)); 
+   newb1.style.width="auto";
+   newb1.setAttribute("id","e"+b);
+   newbtn1= document.createTextNode("edit");
+   newb1.appendChild(newbtn1);
+   currentbtn1 = document.getElementById("p1");
+   document.body.insertBefore(newb1, currentbtn1);
+   newb1.addEventListener("click", edittable.bind(this,b)); 
 
-    newb2 = document.createElement("button");
-    newb2.style.width="auto";
-    newb2.style.backgroundColor="red";
-    newb2.setAttribute("id","d"+i);
-    newbtn2 = document.createTextNode("delete");
-    newb2.appendChild(newbtn2);
-    currentbtn2 = document.getElementById("p1");
-    document.body.insertBefore(newb2, currentbtn2);
-    newb2.addEventListener("click", deletetable.bind(this,i)); 
-    
+   newb2 = document.createElement("button");
+   newb2.style.width="auto";
+   newb2.style.backgroundColor="red";
+   newb2.setAttribute("id","d"+b);
+   newbtn2 = document.createTextNode("delete");
+   newb2.appendChild(newbtn2);
+   currentbtn2 = document.getElementById("p1");
+   document.body.insertBefore(newb2, currentbtn2);
+   newb2.addEventListener("click", deletetable.bind(this,b)); 
   
 }
+
 }
 
 var modal = document.getElementById('id01');
-
-
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
-function edittable(y) {
+function edittable(y) { 
 document.getElementById('id01').style.display='block';
-  
+alert("Click Edit and Save button to save the changes");
+
 parent = document.getElementById("b");
 child1 = document.getElementById("t"+y);
 child2 = document.getElementById("d"+y);
@@ -226,22 +212,57 @@ child3 = document.getElementById("e"+y);
 parent.removeChild(child1); 
 parent.removeChild(child2); 
 parent.removeChild(child3); 
+
 delete menteelist[y];
 localStorage.removeItem("mentee"+y);
-for(  ; y<(menteelist.length); y++) {
- var newarray2 = menteelist[y+1].slice();
- localStorage.setItem("mentee"+y, "Name: "+ newarray2[0]+ " Rating:" + newarray2[1] + "Comments: " + newarray2[2]);
+ 
+document.getElementById("editnsave").onclick= function() {
+    document.getElementById('id01').style.display= 'none';
+    for(;y>=0;) {
+
+    mname[y]= document.getElementById("name").value;
+    rating[y]= document.getElementById("rating").value; 
+    comments[y]= document.getElementById("comments").value;
+    menteelist[y]=[mname[y],rating[y], comments[y]];
+  
+    localStorage.setItem("mentee"+y, "Name: " + menteelist[y][0]+ " Rating:"+ menteelist[y][1]+" Comments: "+ menteelist[y][2]);
+  
+    newp[y] = document.createElement("table");
+    newp[y].setAttribute("id","t"+y);
+    newcontent = document.createTextNode(localStorage.getItem( "mentee"+y));
+    newp[y].appendChild(newcontent);
+    currentp = document.getElementById("p1");
+    document.body.insertBefore(newp[y],currentp);
+
+    newb1[y] = document.createElement("button");
+    newb1[y].style.width="auto";
+    newb1[y].setAttribute("id","e"+y);
+    newbtn1= document.createTextNode("edit");
+    newb1[y].appendChild(newbtn1);
+    currentbtn1 = document.getElementById("p1");
+    document.body.insertBefore(newb1[y], currentbtn1);
+    newb1[y].addEventListener("click", edittable.bind(this,y)); 
+
+    newb2[y] = document.createElement("button");
+    newb2[y].style.width="auto";
+    newb2[y].style.backgroundColor="red";
+    newb2[y].setAttribute("id","d"+y);
+    newbtn2 = document.createTextNode("delete");
+    newb2[y].appendChild(newbtn2);
+    currentbtn2 = document.getElementById("p1");
+    document.body.insertBefore(newb2[y], currentbtn2);
+    newb2[y].addEventListener("click", deletetable.bind(this,y)); 
+   
+   colorvariant(y);
+    
+   break;
+  
+    }
+   }
 }
-localStorage.setItem("count", i+1);
 
 
-return;
-}
-
-
-
-
- function deletetable(x) {
+function deletetable(x) {
 
 parent = document.getElementById("b");
 child1 = document.getElementById("t"+x);
@@ -251,22 +272,33 @@ child3 = document.getElementById("e"+x);
 parent.removeChild(child1); 
 parent.removeChild(child2); 
 parent.removeChild(child3); 
+
 delete menteelist[x];
 localStorage.removeItem("mentee"+x);
-for(  ; x<(menteelist.length-1); x++) {
- var newarray = menteelist[x+1].slice();
- localStorage.setItem("mentee"+x, "Name: "+ newarray[0]+ " Rating:" + newarray[1] + "Comments: " + newarray[2]);
-}
-i--;
-localStorage.setItem("count", i+1);
 
+for(  ; x<(menteelist.length-1); x++) {
+menteelist[x] = menteelist[x+1];
+localStorage.setItem("mentee"+x, "Name: "+ menteelist[x][0]+ " Rating:" + menteelist[x][1] + "Comments: " + menteelist[x][2]);
+
+newp[x+1].setAttribute("id","t"+x);
+newb1[x+1].setAttribute("id","e"+x);
+newb2[x+1].setAttribute("id","d"+x);
+newb1[x+1].removeEventListener("click", edittable.bind(this,x+1)); 
+newb2[x+1].removeEventListener("click", deletetable.bind(this,x+1)); 
+
+newb1[x+1].addEventListener("click", edittable.bind(this,x)); 
+newb2[x+1].addEventListener("click", deletetable.bind(this,x)); 
+
+}
+
+menteelist.pop();
+i= i-1;
+localStorage.setItem("count", i);
 return;
 }
 
-
 function update() {  
   for(;i>=0;) {
-
 
     mname[i]= document.getElementById("name").value;
     rating[i]= document.getElementById("rating").value; 
@@ -274,40 +306,37 @@ function update() {
     menteelist[i]=[mname[i],rating[i], comments[i]];
     localStorage.setItem("count", i+1);
     localStorage.setItem("mentee"+i, "Name: " + menteelist[i][0]+ " Rating:"+ menteelist[i][1]+" Comments: "+ menteelist[i][2]);
-  
-    newp = document.createElement("table");
-    newp.setAttribute("id","t"+i);
+
+    newp[i] = document.createElement("table");
+    newp[i].setAttribute("id","t"+i);
     newcontent = document.createTextNode(localStorage.getItem( "mentee"+i));
-    newp.appendChild(newcontent);
+    newp[i].appendChild(newcontent);
     currentp = document.getElementById("p1");
-    document.body.insertBefore(newp,currentp);
+    document.body.insertBefore(newp[i],currentp);
 
-    newb1 = document.createElement("button");
-    newb1.style.width="auto";
-    newb1.setAttribute("id","e"+i);
+    newb1[i] = document.createElement("button");
+    newb1[i].style.width="auto";
+    newb1[i].setAttribute("id","e"+i);
     newbtn1= document.createTextNode("edit");
-    newb1.appendChild(newbtn1);
+    newb1[i].appendChild(newbtn1);
     currentbtn1 = document.getElementById("p1");
-    document.body.insertBefore(newb1, currentbtn1);
-    newb1.addEventListener("click", edittable.bind(this,i)); 
+    document.body.insertBefore(newb1[i], currentbtn1);
+    newb1[i].addEventListener("click", edittable.bind(this,i)); 
 
-    newb2 = document.createElement("button");
-    newb2.style.width="auto";
-    newb2.style.backgroundColor="red";
-    newb2.setAttribute("id","d"+i);
+    newb2[i] = document.createElement("button");
+    newb2[i].style.width="auto";
+    newb2[i].style.backgroundColor="red";
+    newb2[i].setAttribute("id","d"+i);
     newbtn2 = document.createTextNode("delete");
-    newb2.appendChild(newbtn2);
+    newb2[i].appendChild(newbtn2);
     currentbtn2 = document.getElementById("p1");
-    document.body.insertBefore(newb2, currentbtn2);
-    newb2.addEventListener("click", deletetable.bind(this,i)); 
-    
-    colorvariant();
-    
+    document.body.insertBefore(newb2[i], currentbtn2);
+    newb2[i].addEventListener("click", deletetable.bind(this,i)); 
+  
+    colorvariant(i);
     i++;
     break;
-    
-  }
- 
+     }
 }
 
 function sort() {
@@ -316,39 +345,29 @@ function sort() {
     var duplicate = menteelist.slice();
     duplicate.sort(function(a, b){return a[1] - b[1]});
     var n;
+
     for(n=0;n<i;n++) {
-
-      
       document.getElementById("p2").innerHTML += "<br><b>Name:</b>" + duplicate[n][0] + "<br><b>Rating:</b>" + duplicate[n][1]+ "<br><b>Comments:</b>" + duplicate [n][2]+ "<br>";
-       
-      }
-
+       }
 }
 
-
-function colorvariant() { 
-
-  switch(rating[i]) {
-    
-    case "1": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(255, 0, 0 )";break;
-    case "2": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(230, 25, 0 )";break;
-    case "3": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(200, 60, 0 )";break;
-    case "4": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(175, 85, 0 )";break;
-    case "5": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(150, 110, 0 )";break;
-    case "6": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(120, 140, 0 )";break;
-    case "7": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(95, 165, 0 )";break;
-    case "8": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(65, 195, 0 )";break;
-    case "9": document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(20, 220, 0 )";break;
-    default: document.getElementsByTagName("TABLE")[i].style.backgroundColor="rgb(0, 255, 0 )";
-
-    
+function colorvariant(l) { 
+  switch(menteelist[l][1]) {
+   
+    case "1": document.getElementById("t"+l).style.backgroundColor="rgb(255, 0, 0 )";break;
+    case "2": document.getElementById("t"+l).style.backgroundColor="rgb(230, 25, 0 )";break;
+    case "3": document.getElementById("t"+l).style.backgroundColor="rgb(200, 60, 0 )";break;
+    case "4": document.getElementById("t"+l).style.backgroundColor="rgb(175, 85, 0 )";break;
+    case "5": document.getElementById("t"+l).style.backgroundColor="rgb(150, 110, 0 )";break;
+    case "6": document.getElementById("t"+l).style.backgroundColor="rgb(120, 140, 0 )";break;
+    case "7": document.getElementById("t"+l).style.backgroundColor="rgb(95, 165, 0 )";break;
+    case "8": document.getElementById("t"+l).style.backgroundColor="rgb(65, 195, 0 )";break;
+    case "9": document.getElementById("t"+l).style.backgroundColor="rgb(20, 220, 0 )";break;
+    default: document.getElementById("t"+l).style.backgroundColor="rgb(0, 255, 0 )";
   }
-
   return;  
 }
 
-
 </script>
-
 </body>
 </html>
