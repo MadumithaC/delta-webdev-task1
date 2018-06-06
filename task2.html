@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+    
+}
+
+</style>
+</head>
+<body onload="startGame()">
+
+
+<script>
+
+var Deep;
+var walls = [];
+var Enemies = [];
+var Bullets = [];
+var Gun=[];
+var Score;
+var gunSound;
+var Bgmusic;
+var gameOverSound;
+var y =20;
+
+function startGame() {
+    Deep = new component(15, 15, "blue", 20, 135, "c");
+    walls=[];
+    Bullets = [];
+    Enemies = [];
+    Gun = [];
+    gameOverSound = new sound("http://www.audioblocks.com/stock-audio/game-over-or-lost-sound_GJai-BN_.mp3");
+    gunSound=new sound("https://www.audioblocks.com/stock-audio/mud-hit_zJA0M3VO.mp3");
+    Bgmusic = new sound("http://soundimage.org/wp-content/uploads/2016/02/Game-Menu_Looping.mp3");
+    Bgmusic.play();
+    Score = new component("30px", "Consolas", "black", 280, 40, "text");
+    DeepMaze.start();
+}
+
+var DeepMaze = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 480;
+       this.canvas.height = 270;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
+        this.interval = setInterval(updateDeepMaze, y);
+        window.addEventListener('mousemove', function (e) {
+            DeepMaze.x = e.pageX;
+            DeepMaze.y = e.pageY;
+        })
+        
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    stop : function() {
+        clearInterval(this.interval);
+        document.get
+    }
+     
+}
+
+function component(width, height, color, x, y, type) {
+    
+    this.type = type;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;    
+    this.update = function() {
+        ctx = DeepMaze.context;
+        if(this.type=="c"){
+            ctx.beginPath();
+            ctx.arc(this.x,this.y,15,0,2*Math.PI);
+            ctx.fillStyle=color;
+            ctx.fill();
+        }
+        else if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+    this.newPos = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;        
+    }
+    this.crashWith = function(otherobj) {
+        var myleft = this.x - (this.width);
+        var myright = this.x + (this.width);
+        var mytop = this.y - (this.height);
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
+}
+
+function updateDeepMaze() {
+    var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+    for (i = 0; i < walls.length; i += 1) {
+        if (Deep.crashWith(walls[i])) { 
+            DeepMaze.stop();
+            document.getElementById("restart").style.display ="block" ; 
+            ctx.font="30px Arial";
+            ctx.fillText("GAME OVER",145,145);
+            ctx.rect(0,0,480,270);
+            ctx.fillStyle="rgba(100,100,100,0.5)";
+            ctx.fill();
+            gameOverSound.play();
+            Bgmusic.stop();
+            return;
+        }  
+    }
+    for(i=0; i< Bullets.length;i+=1) {
+      if(Deep.crashWith(Bullets[i])) {
+        DeepMaze.stop();
+        document.getElementById("restart").style.display ="block" ; 
+            ctx.font="30px Arial";
+            ctx.fillText("GAME OVER",145,145);
+            ctx.rect(0,0,480,270);
+            ctx.fillStyle="rgba(100,100,100,0.5)";
+            ctx.fill();
+            gameOverSound.play();
+            Bgmusic.stop();
+            return;
+      }    
+    }
+    
+     for(i=0; i< Bullets.length;i++) {
+        for (j=0; j<Gun.length; j++){
+            if(Bullets[i].crashWith(Gun[j])) {
+                Bullets[i] = new component(0,0,"white",0,0);
+            }
+        }
+     }
+
+    DeepMaze.clear();
+    DeepMaze.frameNo += 1;
+    if (DeepMaze.frameNo == 1 || everyinterval(150)) {
+        x = DeepMaze.canvas.width;
+        minHeight = 20;
+        maxHeight = 200;
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        minGap = 50;
+        maxGap = 200;
+        gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        walls.push(new component(10, height, "green", x, 0));
+        walls.push(new component(10, x - height - gap, "green", x, height + gap));
+       
+      
+      for(i=0; DeepMaze.frameNo > (500*i) ; i++) {
+       Bullets.push(new component(5,5,"red",x-25, i*45+10));
+       Enemies.push(new component(20,20,"black", x-25, i*40+10));
+     }
+
+    }
+    
+    
+
+
+
+
+    for (i = 0; i < walls.length; i += 1) {
+        walls[i].speedX = -1;
+        walls[i].newPos();
+        walls[i].update();
+       
+    }
+    for (i=0; i< Bullets.length; i += 1) {
+    var x = Math.floor((Math.random() * 3) +1);
+
+    Bullets[i].speedX= -(x);
+      Bullets[i].newPos();
+        Bullets[i].update();
+   }  
+
+   for (i=0; i< Enemies.length; i += 1) {
+        Enemies[i].update();
+   }
+
+
+    Score.text="SCORE: " + DeepMaze.frameNo;
+    Score.update();
+    Deep.newPos(); 
+    if (DeepMaze.x && DeepMaze.y) {
+        Deep.x = DeepMaze.x;
+        Deep.y = DeepMaze.y;        
+    }   
+    Deep.update();
+     
+
+ window.addEventListener('mousedown', function (e) { 
+        gunSound.play();
+           Gun.push(new component(5,5, "brown", Deep.x, Deep.y)) ;
+        })
+ for(i=1; i<Gun.length; i++) {
+    Gun[i].speedX= 2;
+     Gun[i].newPos();
+        Gun[i].update();
+ }
+ 
+        clearInterval(DeepMaze.interval); 
+        
+        if(DeepMaze.frameNo > (500)){
+          y = y*.8;
+        }
+
+        DeepMaze.interval = setInterval(updateDeepMaze, y); 
+
+
+}
+ 
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }    
+}
+
+
+function everyinterval(n) {
+    if ((DeepMaze.frameNo / n) % 1 == 0) {return true;}
+    return false;
+}
+
+function restart() {
+    DeepMaze.stop();
+    DeepMaze.clear();
+    startGame();
+    document.getElementById("restart").style.display ="none" ; 
+}
+
+</script>
+<br>
+<button style="display: none" id = "restart" onmousedown="restart()">Restart</button>
+
+
+<h2> Click the mouse to destroy the enemy bullets </h2>
+
+</body>
+</html>
